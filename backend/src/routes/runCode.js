@@ -17,15 +17,17 @@ const fibonacci = (n,animationStep=[]) => {
       isBaseCase: true
     };
   }
-  const left = fibonacci(n - 1);
-  const right = fibonacci(n - 2);
+  const left = fibonacci(n - 1,animationStep);
+  const right = fibonacci(n - 2,animationStep);
   const value = left.value + right.value;
-  return {
+  const result = {
     name: `Fibonacci(${n}) = ${value}`,
     value: value,
     children: [left, right],
     isBaseCase: false
   };
+  animationStep.push(result);
+  return result;
 };
 
 // Factorial implementation
@@ -44,8 +46,14 @@ const factorial = (n,animationStep=[]) => {
       isBaseCase: true
     };
   }
-  const child = factorial(n - 1);
+  const child = factorial(n - 1,animationStep);
   const value = n * child.value;
+  animationStep.push({
+    name: `Factorial(${n}) = ${value}`,
+    value: value,
+    children: [child],
+    isBaseCase: false
+  });
   return {
     name: `Factorial(${n}) = ${value}`,
     value: value,
@@ -54,62 +62,24 @@ const factorial = (n,animationStep=[]) => {
   };
 };
 
-// Sum of N implementation
-const sumOfN = (n,animationStep=[]  ) => {
-  if (n === 0) {
-    animationStep.push({
-      name: `Sum(${n}) = 0`,
-      value: 0,
-      children: [],
-      isBaseCase: true
-    });
-    return {
-      name: `Sum(${n}) = 0`,
-      value: 0,
-      children: [],
-      isBaseCase: true
-    };
-  }
-  const child = sumOfN(n - 1);
-  const value = n + child.value;
-  return {
-    name: `Sum(${n}) = ${value}`,
-    value: value,
-    children: [child],
-    isBaseCase: false
-  };
-};
 
-// Power function implementation
-const power = (base, exp,animationStep=[] ) => {
-  if (exp === 0) {
-    animationStep.push({
-      name: `Power(${base},${exp}) = 1`,
-      value: 1,
-      children: [],
-      isBaseCase: true
-    });
-    return {
-      name: `Power(${base},${exp}) = 1`,
-      value: 1,
-      children: [],
-      isBaseCase: true
-    };
-  }
-  const child = power(base, exp - 1);
-  const value = base * child.value;
-  return {
-    name: `Power(${base},${exp}) = ${value}`,
-    value: value,
-    children: [child],
-    isBaseCase: false
-  };
-};
 
 router.post('/', (req, res) => {
   try {
     const { functionName, input } = req.body;
-    console.log('Received request:', { functionName, input }); // Debug log
+    
+    // Input validation
+    if (!functionName || input === undefined) {
+      throw new Error('Missing required parameters');
+    }
+    
+    if (typeof input !== 'number' && !Number.isInteger(Number(input))) {
+      throw new Error('Input must be a valid integer');
+    }
+    
+    if (input < 0) {
+      throw new Error('Input must be a non-negative integer');
+    }
 
     let result;
     switch (functionName) {
@@ -119,27 +89,13 @@ router.post('/', (req, res) => {
       case 'Factorial':
         result = factorial(parseInt(input));
         break;
-      case 'Sum':
-        result = sumOfN(parseInt(input));
-        break;
-      case 'Power':
-        if (!input || typeof input !== 'object') {
-          throw new Error('Power function requires an object with base and exp properties');
-        }
-        const { base, exp } = input;
-        if (base === undefined || exp === undefined) {
-          throw new Error('Power function requires both base and exp values');
-        }
-        result = power(parseInt(base), parseInt(exp));
-        break;
       default:
         throw new Error(`Unsupported function: ${functionName}`);
     }
     
-    console.log('Sending response:', result); // Debug log
     res.json(result);
   } catch (error) {
-    console.error('Error:', error); // Debug log
+    console.error('Error:', error);
     res.status(400).json({ error: error.message });
   }
 });

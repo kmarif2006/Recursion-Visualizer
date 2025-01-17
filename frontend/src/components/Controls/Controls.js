@@ -5,10 +5,6 @@ const Controls = ({
   setFunctionName, 
   inputValue, 
   setInputValue,
-  powerBase,
-  setPowerBase,
-  powerExp,
-  setPowerExp,
   onGenerateTree 
 }) => {
   return (
@@ -21,44 +17,17 @@ const Controls = ({
         >
           <option value="Fibonacci">Fibonacci</option>
           <option value="Factorial">Factorial</option>
-          <option value="SumOfN">Sum of N</option>
-          <option value="Power">Power</option>
         </select>
 
-        {functionName === 'Power' ? (
-          <>
-            <input 
-              type="number" 
-              value={powerBase}
-              onChange={(e) => setPowerBase(parseInt(e.target.value) || 0)}
-              placeholder="Enter base"
-              title="Enter the base number (e.g., 2 for 2^n)"
-              className="px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 w-24"
-            />
-            <input 
-              type="number" 
-              value={powerExp}
-              onChange={(e) => setPowerExp(parseInt(e.target.value) || 0)}
-              placeholder="Enter exponent"
-              title="Enter the exponent (e.g., 3 for x³)"
-              className="px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 w-24"
-            />
-          </>
-        ) : (
-          <input 
-            type="number" 
-            value={inputValue}
-            onChange={(e) => setInputValue(parseInt(e.target.value) || 0)}
-            placeholder={`Enter ${functionName === 'Fibonacci' ? 'n' : 
-                         functionName === 'Factorial' ? 'number' : 
-                         functionName === 'SumOfN' ? 'n' : 'value'}`}
-            title={functionName === 'Fibonacci' ? 'Enter a number n to calculate the nth Fibonacci number' :
-                   functionName === 'Factorial' ? 'Enter a number to calculate its factorial' :
-                   functionName === 'SumOfN' ? 'Enter a number n to calculate sum from 1 to n' :
-                   'Enter a value'}
-            className="px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 w-28"
-          />
-        )}
+        <input 
+          type="number" 
+          value={inputValue}
+          onChange={(e) => setInputValue(parseInt(e.target.value) || 0)}
+          placeholder={`Enter ${functionName === 'Fibonacci' ? 'n' : 'number'}`}
+          title={functionName === 'Fibonacci' ? 'Enter a number n to calculate the nth Fibonacci number' :
+                 'Enter a number to calculate its factorial'}
+          className="px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 w-28"
+        />
 
         <button 
           onClick={onGenerateTree}
