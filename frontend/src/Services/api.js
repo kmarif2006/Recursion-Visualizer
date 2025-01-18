@@ -8,8 +8,8 @@ export const generateRecursionTree = async (functionName, inputValue) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        functionName: functionName,
-        input: inputValue
+        functionName,
+        input: parseInt(inputValue)
       })
     });
     
@@ -17,7 +17,8 @@ export const generateRecursionTree = async (functionName, inputValue) => {
       throw new Error('Network response was not ok');
     }
     
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Error:', error);
     throw error;

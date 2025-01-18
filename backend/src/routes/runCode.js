@@ -2,64 +2,62 @@ import express from 'express';
 const router = express.Router();
 
 // Fibonacci implementation
-const fibonacci = (n,animationStep=[]) => {
+const fibonacci = (n, animationStep = [], id = '0') => {
   if (n <= 1) {
-    animationStep.push({
-      name: `Fibonacci(${n}) = ${n}`,
-      value: n,
-      children: [],
-      isBaseCase: true
-    });
-    return {
-      name: `Fibonacci(${n}) = ${n}`,
+    const node = {
+      id,
+      name: `fibonacci(${n}) = ${n}`,
       value: n,
       children: [],
       isBaseCase: true
     };
+    animationStep.push(node);
+    return node;
   }
-  const left = fibonacci(n - 1,animationStep);
-  const right = fibonacci(n - 2,animationStep);
+
+  const left = fibonacci(n - 1, animationStep, `${id}-0`);
+  const right = fibonacci(n - 2, animationStep, `${id}-1`);
   const value = left.value + right.value;
-  const result = {
-    name: `Fibonacci(${n}) = ${value}`,
-    value: value,
+  
+  const node = {
+    id,
+    name: `fibonacci(${n}) = ${value}`,
+    value,
     children: [left, right],
     isBaseCase: false
   };
-  animationStep.push(result);
-  return result;
+  
+  animationStep.push(node);
+  return node;
 };
 
 // Factorial implementation
-const factorial = (n,animationStep=[]) => {
+const factorial = (n, animationStep = [], id = '0') => {
   if (n === 0 || n === 1) {
-    animationStep.push({
-      name: `Factorial(${n}) = 1`,
-      value: 1,
-      children: [],
-      isBaseCase: true
-    });
-    return {
-      name: `Factorial(${n}) = 1`,
+    const node = {
+      id,
+      name: `factorial(${n}) = 1`,
       value: 1,
       children: [],
       isBaseCase: true
     };
+    animationStep.push(node);
+    return node;
   }
-  const child = factorial(n - 1,animationStep);
+
+  const child = factorial(n - 1, animationStep, `${id}-0`);
   const value = n * child.value;
-  animationStep.push({
-    name: `Factorial(${n}) = ${value}`,
-    value: value,
-    children: [child],
-    isBaseCase: false
-  });
-  return {
-    name: `Factorial(${n}) = ${value}`,
-    value: value,
+  
+  const node = {
+    id,
+    name: `factorial(${n}) = ${value}`,
+    value,
     children: [child],
     isBaseCase: false
   };
+  
+  animationStep.push(node);
+  return node;
 };
 
 
