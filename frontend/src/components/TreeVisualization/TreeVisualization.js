@@ -3,7 +3,7 @@ import { Tree } from "react-d3-tree";
 import TreeNode from './TreeNode';
 import { resetStates } from './utils';
 
-const TreeVisualization = ({ recursionData }) => {
+const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, currentStep }) => {
   const [nodeColors, setNodeColors] = useState({});
   const [activeNodeId, setActiveNodeId] = useState(null);
   const [nodeValues, setNodeValues] = useState({});
@@ -11,27 +11,33 @@ const TreeVisualization = ({ recursionData }) => {
 
   useEffect(() => {
     resetStates(setNodeColors, setNodeValues, setCompletedNodes, setActiveNodeId);
+    setProgress(0);
+    setCurrentMessage('');
 
     if (recursionData) {
-      const simulateRecursion = async (node, depth = 0) => {
-        // Entering the function call
+      const totalNodes = countNodes(recursionData);
+      let processedNodes = 0;
+
+      const simulateRecursion = async (node) => {
         setActiveNodeId(node.id);
         setNodeColors(prev => ({ ...prev, [node.id]: '#60A5FA' }));
+        setCurrentMessage(`fn(${node.value}) called`);
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Process children if they exist
         if (node.children && node.children.length > 0) {
           for (const child of node.children) {
-            await simulateRecursion(child, depth + 1);
+            await simulateRecursion(child);
           }
         } else {
-          // Base case reached
           setNodeColors(prev => ({ ...prev, [node.id]: '#22C55E' }));
           setNodeValues(prev => ({ ...prev, [node.id]: node.value }));
+          setCurrentMessage(`fn(${node.value}) returns ${node.value}`);
           await new Promise(resolve => setTimeout(resolve, 600));
         }
 
-        // Calculate and show return value
+        processedNodes++;
+        setProgress(Math.min((processedNodes / totalNodes) * 100, 100));
+
         setNodeValues(prev => ({ ...prev, [node.id]: node.value }));
         setNodeColors(prev => ({ ...prev, [node.id]: '#2563EB' }));
         setCompletedNodes(prev => new Set(prev).add(node.id));
@@ -39,9 +45,39 @@ const TreeVisualization = ({ recursionData }) => {
         await new Promise(resolve => setTimeout(resolve, 600));
       };
 
-      simulateRecursion(recursionData);
+      // Start the simulation from the current step
+      const startNode = getNodeAtStep(recursionData, currentStep);
+      if (startNode) {
+        simulateRecursion(startNode);
+      }
     }
-  }, [recursionData]);
+  }, [recursionData, setProgress, setCurrentMessage, currentStep]);
+
+  const countNodes = (node) => {
+    let count = 1;
+    if (node.children) {
+      node.children.forEach(child => {
+        count += countNodes(child);
+      });
+    }
+    return count;
+  };
+
+  const getNodeAtStep = (node, step) => {
+    let count = 0;
+    const traverse = (currentNode) => {
+      if (count === step) return currentNode;
+      count++;
+      if (currentNode.children) {
+        for (const child of currentNode.children) {
+          const result = traverse(child);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+    return traverse(node);
+  };
 
   if (!recursionData) {
     return (
