@@ -28,12 +28,12 @@ const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, curr
     });
   };
 
-  // Memoize the wheel handler to prevent unnecessary re-renders
+  // Memoize the wheel handler with adjusted zoom parameters
   const handleWheel = useCallback((e) => {
     e.preventDefault();
-    const scaleSensitivity = 0.002;
-    const minScale = 0.5;
-    const maxScale = 2;
+    const scaleSensitivity = 0.001; // Reduced for finer control
+    const minScale = 0.1;   // Increased zoom out range
+    const maxScale = 4.0;   // Increased zoom in range
     
     const newScale = Math.min(
       Math.max(
