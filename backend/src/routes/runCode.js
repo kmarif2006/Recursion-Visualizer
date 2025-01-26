@@ -146,21 +146,125 @@ const sumDigits = (n, animationStep = [], id = '0') => {
   return node;
 };
 
+// Binary Search implementation
+const binarySearch = (target, left, right, animationStep = [], id = '0') => {
+  if (left > right) {
+    const node = {
+      id,
+      name: `binarySearch(${target}, ${left}, ${right}) = "Not Found"`,
+      value: "Not Found",
+      children: [],
+      isBaseCase: true
+    };
+    animationStep.push(node);
+    return node;
+  }
+
+  const mid = Math.floor((left + right) / 2);
+  
+  if (mid === target) {
+    const node = {
+      id,
+      name: `binarySearch(${target}, ${left}, ${right}) = ${mid}`,
+      value: mid,
+      children: [],
+      isBaseCase: true
+    };
+    animationStep.push(node);
+    return node;
+  }
+
+  const child = target < mid 
+    ? binarySearch(target, left, mid - 1, animationStep, `${id}-0`)
+    : binarySearch(target, mid + 1, right, animationStep, `${id}-1`);
+
+  const node = {
+    id,
+    name: `binarySearch(${target}, ${left}, ${right})`,
+    value: child.value,
+    children: [child],
+    isBaseCase: false
+  };
+  
+  animationStep.push(node);
+  return node;
+};
+
+// ArraySum implementation
+const arraySum = (arr, index = 0, animationStep = [], id = '0') => {
+  // Base case: reached end of array
+  if (index === arr.length) {
+    const node = {
+      id,
+      name: `arraySum([${arr.join(',')}], ${index}) = 0`,
+      value: 0,
+      children: [],
+      isBaseCase: true
+    };
+    animationStep.push(node);
+    return node;
+  }
+
+  // Recursive case
+  const child = arraySum(arr, index + 1, animationStep, `${id}-0`);
+  const value = arr[index] + child.value;
+  
+  const node = {
+    id,
+    name: `arraySum([${arr.join(',')}], ${index}) = ${value}`,
+    value: value,
+    children: [child],
+    isBaseCase: false
+  };
+  
+  animationStep.push(node);
+  return node;
+};
+
+// Tower of Hanoi implementation
+const towerOfHanoi = (n, source = 'A', auxiliary = 'B', target = 'C', animationStep = [], id = '0') => {
+  if (n === 1) {
+    const node = {
+      id,
+      name: `hanoi(${n}, ${source}, ${auxiliary}, ${target})`,
+      value: `Move disk 1 from ${source} to ${target}`,
+      children: [],
+      isBaseCase: true
+    };
+    animationStep.push(node);
+    return node;
+  }
+
+  const child1 = towerOfHanoi(n - 1, source, target, auxiliary, animationStep, `${id}-0`);
+  const child2 = towerOfHanoi(n - 1, auxiliary, source, target, animationStep, `${id}-1`);
+
+  const node = {
+    id,
+    name: `hanoi(${n}, ${source}, ${auxiliary}, ${target})`,
+    value: `Move disk ${n} from ${source} to ${target}`,
+    children: [child1, child2],
+    isBaseCase: false
+  };
+
+  animationStep.push(node);
+  return node;
+};
+
+// Add input validation helper
+const validateNumericInput = (value) => {
+  if (typeof value !== 'number' || isNaN(value)) {
+    throw new Error('Invalid numeric input');
+  }
+};
+
 router.post('/', (req, res) => {
   try {
     const { functionName, input } = req.body;
     
-    // Input validation
+    console.log('Received request:', { functionName, input }); // Debug log
+    
     if (!functionName || input === undefined) {
       throw new Error('Missing required parameters');
-    }
-    
-    if (typeof input !== 'number' && !Number.isInteger(Number(input))) {
-      throw new Error('Input must be a valid integer');
-    }
-    
-    if (input < 0) {
-      throw new Error('Input must be a non-negative integer');
     }
 
     let result;
@@ -168,9 +272,11 @@ router.post('/', (req, res) => {
       case 'Fibonacci':
         result = fibonacci(parseInt(input));
         break;
+        
       case 'Factorial':
         result = factorial(parseInt(input));
         break;
+        
       case 'Power': {
         const [base, exponent] = input.split(',').map(Number);
         validateNumericInput(base);
@@ -179,7 +285,7 @@ router.post('/', (req, res) => {
         result = power(base, exponent);
         break;
       }
-
+      
       case 'GCD': {
         const [a, b] = input.split(',').map(Number);
         validateNumericInput(a);
@@ -188,21 +294,53 @@ router.post('/', (req, res) => {
         result = gcd(a, b);
         break;
       }
+      
+      case 'ArraySum': {
+        console.log('Processing ArraySum with input:', input); // Debug log
+        let arr;
+        try {
+          arr = Array.isArray(input) ? input : input.split(',').map(num => {
+            const parsed = Number(num.trim());
+            if (isNaN(parsed)) throw new Error('Invalid array input');
+            return parsed;
+          });
+        } catch (e) {
+          throw new Error('Invalid array input format. Please provide comma-separated numbers.');
+        }
 
-      case 'SumDigits': {
-        validateNumericInput(input);
-        const n = parseInt(input);
-        if (n > 9999) throw new Error('For visualization purposes, please use numbers ≤ 9999');
-        result = sumDigits(n);
+        if (arr.length === 0) {
+          throw new Error('Array cannot be empty');
+        }
+        if (arr.length > 10) {
+          throw new Error('For visualization purposes, please use arrays of length ≤ 10');
+        }
+        
+        arr.forEach(num => {
+          if (typeof num !== 'number' || isNaN(num)) {
+            throw new Error('Array must contain valid numbers only');
+          }
+        });
+
+        const animationStep = [];
+        result = arraySum(arr, 0, animationStep);
+        console.log('ArraySum result:', result); // Debug log
         break;
       }
+      
+      case 'TowerOfHanoi': {
+        validateNumericInput(input);
+        if (input > 5) throw new Error('For visualization purposes, please use n ≤ 5');
+        result = towerOfHanoi(parseInt(input));
+        break;
+      }
+      
       default:
         throw new Error(`Unsupported function: ${functionName}`);
     }
     
     res.json(result);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Backend Error:', error); // Debug log
     res.status(400).json({ error: error.message });
   }
 });

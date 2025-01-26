@@ -29,25 +29,6 @@ function App() {
     }
   };
 
-  const handleAction1 = () => {
-    setCurrentStep(0);
-    setCurrentMessage('Reset to the beginning of the visualization.');
-  };
-
-  const handleAction2 = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 0));
-    setCurrentMessage('Moved one step back in the visualization.');
-  };
-
-  const handleAction3 = () => {
-    setCurrentStep(prev => Math.min(prev + 1, recursionData ? countNodes(recursionData) - 1 : 0));
-    setCurrentMessage('Moved one step forward in the visualization.');
-  };
-
-  const handleAction4 = () => {
-    setCurrentStep(recursionData ? countNodes(recursionData) - 1 : 0);
-    setCurrentMessage('Jumped to the end of the visualization.');
-  };
 
   const countNodes = (node) => {
     let count = 1;
@@ -73,12 +54,9 @@ function App() {
         
         {/* Visualization Controls Panel */}
         <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
-          <h2 className="text-lg font-semibold text-blue-800 mb-2">Visualization Controls</h2>
+          <h2 className="text-lg font-semibold text-blue-800 mb-2">Progress Bar</h2>
           <ControlPanel 
-            onAction1={handleAction1}
-            onAction2={handleAction2}
-            onAction3={handleAction3}
-            onAction4={handleAction4}
+           
             progress={progress}
             currentMessage={currentMessage}
           />
