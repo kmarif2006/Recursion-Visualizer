@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CodeViewer = ({ functionName }) => {
+const CodeViewer = ({ functionName, isDarkMode }) => {
   const codeExamples = {
     Fibonacci: `def fibonacci(n):
     
@@ -60,20 +60,20 @@ const CodeViewer = ({ functionName }) => {
     
     return n % 10 + sum_digits(n // 10)`,
 
-    BinarySearch: `def binary_search(target, left, right):
+    BinarySearch: `def binary_search(arr, target, left, right):
     
     if left > right:
-        return "Not Found"
+        return -1
     
     mid = (left + right) // 2
     
-    if mid == target:
+    if arr[mid] == target:
         return mid
     
-    elif mid > target:
-        return binary_search(target, left, mid - 1)
+    elif arr[mid] > target:
+        return binary_search(arr, target, left, mid - 1)
     else:
-        return binary_search(target, mid + 1, right)`,
+        return binary_search(arr, target, mid + 1, right)`,
 
     TowerOfHanoi: `def tower_of_hanoi(n, source='A', auxiliary='B', target='C'):
     
@@ -99,12 +99,16 @@ const CodeViewer = ({ functionName }) => {
   };
 
   return (
-    <div className="h-full bg-gray-900 rounded-lg overflow-hidden">
-      <div className="h-full p-4 overflow-y-auto">
-        <pre className="text-gray-100 font-mono text-sm whitespace-pre-wrap">
-          <code>{codeExamples[functionName] || 'Select an algorithm to view its code'}</code>
-        </pre>
-      </div>
+    <div className="h-full">
+      <pre className={`font-mono text-sm whitespace-pre-wrap p-4 rounded-lg transition-colors duration-200
+        ${isDarkMode 
+          ? 'bg-gray-800 text-gray-100' 
+          : 'bg-white text-gray-800'}`}
+      >
+        <code>
+          {codeExamples[functionName] || 'Select a function to view its implementation'}
+        </code>
+      </pre>
     </div>
   );
 };

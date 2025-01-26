@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { resetStates } from './utils';
 
-const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, currentStep }) => {
+const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, currentStep, isDarkMode }) => {
   const [nodeColors, setNodeColors] = useState({});
   const [activeNodeId, setActiveNodeId] = useState(null);
   const [nodeValues, setNodeValues] = useState({});
@@ -271,8 +271,9 @@ const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, curr
 
   if (!recursionData) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center text-blue-400">
-        Generate a tree to visualize recursion
+      <div className={`h-full flex items-center justify-center transition-colors duration-200
+        ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+        Select a function and input to visualize
       </div>
     );
   }
@@ -300,128 +301,133 @@ const TreeVisualization = ({ recursionData, setProgress, setCurrentMessage, curr
   viewBox.maxY += padding;
 
   return (
-    <div 
-      className="w-full h-full relative overflow-hidden cursor-grab active:cursor-grabbing"
-      ref={containerRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onDoubleClick={handleDoubleClick}
-    >
-      {/* Zoom controls */}
-      <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
-        <button
-          className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
-          onClick={() => setTransform(prev => ({ 
-            ...prev, 
-            scale: Math.min(prev.scale + 0.2, 2)
-          }))}
+    <div className={`h-[500px] rounded-lg overflow-hidden transition-colors duration-200
+      ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <div className="h-full">
+        <div 
+          className="w-full h-full relative overflow-hidden cursor-grab active:cursor-grabbing"
+          ref={containerRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onDoubleClick={handleDoubleClick}
         >
-          +
-        </button>
-        <button
-          className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
-          onClick={() => setTransform(prev => ({ 
-            ...prev, 
-            scale: Math.max(prev.scale - 0.2, 0.5)
-          }))}
-        >
-          -
-        </button>
-        <button
-          className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors text-xs"
-          onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
-        >
-          R
-        </button>
-      </div>
+          {/* Zoom controls */}
+          <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+            <button
+              className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+              onClick={() => setTransform(prev => ({ 
+                ...prev, 
+                scale: Math.min(prev.scale + 0.2, 2)
+              }))}
+            >
+              +
+            </button>
+            <button
+              className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+              onClick={() => setTransform(prev => ({ 
+                ...prev, 
+                scale: Math.max(prev.scale - 0.2, 0.5)
+              }))}
+            >
+              -
+            </button>
+            <button
+              className="bg-blue-500 text-white w-8 h-8 rounded-full shadow-lg hover:bg-blue-600 transition-colors text-xs"
+              onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
+            >
+              R
+            </button>
+          </div>
 
-      <svg
-        width="100%"
-        height="100%"
-        viewBox={`${viewBox.minX} ${viewBox.minY} ${viewBox.maxX - viewBox.minX} ${viewBox.maxY - viewBox.minY}`}
-        style={{
-          transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
-          transformOrigin: '0 0',
-          transition: isDragging ? 'none' : 'transform 0.3s ease-out'
-        }}
-      >
-        {/* Render links with improved curves */}
-        {links.map(link => (
-          <path
-            key={link.id}
-            d={link.path}
-            fill="none"
-            className={`stroke-[1.5] ${
-              completedNodes.has(link.sourceId) && completedNodes.has(link.targetId)
-                ? 'stroke-blue-600'
-                : 'stroke-gray-300'
-            } transition-all duration-700`}
+          <svg
+            width="100%"
+            height="100%"
+            viewBox={`${viewBox.minX} ${viewBox.minY} ${viewBox.maxX - viewBox.minX} ${viewBox.maxY - viewBox.minY}`}
             style={{
-              opacity: animatingNodes.has(link.targetId) ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out'
+              transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
+              transformOrigin: '0 0',
+              transition: isDragging ? 'none' : 'transform 0.3s ease-out'
             }}
-          />
-        ))}
-
-        {/* Render nodes with improved positioning */}
-        {nodes.map(node => (
-          <g
-            key={node.id}
-            style={{
-              opacity: animatingNodes.has(node.id) ? 1 : 0,
-              transform: `translate(${node.x}px, ${node.y}px) scale(${
-                node.id === activeNodeId ? 1.1 : 
-                node.id === hoveredNode ? 1.05 : 1
-              })`,
-              transition: 'all 0.3s ease-in-out'
-            }}
-            onMouseEnter={() => setHoveredNode(node.id)}
-            onMouseLeave={() => setHoveredNode(null)}
-            className="cursor-pointer"
-            onClick={(e) => node.hasChildren && toggleNode(node.id, e)}
           >
-            {/* Node background glow */}
-            <circle
-              r={20}
-              fill={nodeColors[node.id] || '#94A3B8'}
-              className="opacity-20 blur-md"
-              style={{
-                transform: `scale(${node.id === activeNodeId ? 1.5 : 1})`,
-                transition: 'all 0.3s ease-in-out'
-              }}
-            />
-            
-            {/* Main node circle */}
-            <circle
-              r={16}
-              fill={nodeColors[node.id] || '#94A3B8'}
-              className={`transition-all duration-300 ${
-                node.id === activeNodeId ? 'filter drop-shadow-lg' : ''
-              }`}
-            />
+            {/* Render links with improved curves */}
+            {links.map(link => (
+              <path
+                key={link.id}
+                d={link.path}
+                fill="none"
+                className={`stroke-[1.5] ${
+                  completedNodes.has(link.sourceId) && completedNodes.has(link.targetId)
+                    ? 'stroke-blue-600'
+                    : 'stroke-gray-300'
+                } transition-all duration-700`}
+                style={{
+                  opacity: animatingNodes.has(link.targetId) ? 1 : 0,
+                  transition: 'opacity 0.5s ease-in-out'
+                }}
+              />
+            ))}
 
-            {/* Node content */}
-            <foreignObject x="-50" y="-35" width="100" height="50">
-              <div className="flex flex-col items-center justify-center">
-                <div className="text-[10px] font-medium text-blue-900 bg-blue-50 px-2 py-1 rounded-t-md shadow-sm border border-blue-200 w-full text-center truncate">
-                  {node.data.name.split(' = ')[0]}
-                </div>
-                <div className={`text-[11px] font-bold text-white px-2 py-1 rounded-b-md shadow-sm border border-blue-300 w-full text-center ${
-                  nodeColors[node.id] === '#22C55E'
-                    ? 'bg-green-500'
-                    : nodeColors[node.id] === '#2563EB'
-                    ? 'bg-blue-600'
-                    : 'bg-blue-400'
-                }`}>
-                  {nodeValues[node.id] !== undefined ? nodeValues[node.id] : '...'}
-                </div>
-              </div>
-            </foreignObject>
-          </g>
-        ))}
-      </svg>
+            {/* Render nodes with improved positioning */}
+            {nodes.map(node => (
+              <g
+                key={node.id}
+                style={{
+                  opacity: animatingNodes.has(node.id) ? 1 : 0,
+                  transform: `translate(${node.x}px, ${node.y}px) scale(${
+                    node.id === activeNodeId ? 1.1 : 
+                    node.id === hoveredNode ? 1.05 : 1
+                  })`,
+                  transition: 'all 0.3s ease-in-out'
+                }}
+                onMouseEnter={() => setHoveredNode(node.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+                className="cursor-pointer"
+                onClick={(e) => node.hasChildren && toggleNode(node.id, e)}
+              >
+                {/* Node background glow */}
+                <circle
+                  r={20}
+                  fill={nodeColors[node.id] || '#94A3B8'}
+                  className="opacity-20 blur-md"
+                  style={{
+                    transform: `scale(${node.id === activeNodeId ? 1.5 : 1})`,
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                />
+                
+                {/* Main node circle */}
+                <circle
+                  r={16}
+                  fill={nodeColors[node.id] || '#94A3B8'}
+                  className={`transition-all duration-300 ${
+                    node.id === activeNodeId ? 'filter drop-shadow-lg' : ''
+                  }`}
+                />
+
+                {/* Node content */}
+                <foreignObject x="-50" y="-35" width="100" height="50">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="text-[10px] font-medium text-blue-900 bg-blue-50 px-2 py-1 rounded-t-md shadow-sm border border-blue-200 w-full text-center truncate">
+                      {node.data.name.split(' = ')[0]}
+                    </div>
+                    <div className={`text-[11px] font-bold text-white px-2 py-1 rounded-b-md shadow-sm border border-blue-300 w-full text-center ${
+                      nodeColors[node.id] === '#22C55E'
+                        ? 'bg-green-500'
+                        : nodeColors[node.id] === '#2563EB'
+                        ? 'bg-blue-600'
+                        : 'bg-blue-400'
+                    }`}>
+                      {nodeValues[node.id] !== undefined ? nodeValues[node.id] : '...'}
+                    </div>
+                  </div>
+                </foreignObject>
+              </g>
+            ))}
+          </svg>
+        </div>
+      </div>
     </div>
   );
 };

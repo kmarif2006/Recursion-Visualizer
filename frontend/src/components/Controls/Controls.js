@@ -5,16 +5,47 @@ const Controls = ({
   setFunctionName, 
   inputValue, 
   setInputValue,
-  onGenerateTree 
+  onGenerateTree,
+  isDarkMode 
 }) => {
   const getFunctionConfig = (name) => {
     const configs = {
-      Fibonacci: { type: 'single', placeholder: 'Enter number (e.g., 5)', title: 'Enter a number for Fibonacci sequence' },
-      Factorial: { type: 'single', placeholder: 'Enter number (e.g., 5)', title: 'Enter a number for Factorial calculation' },
-      Power: { type: 'pair', placeholder: 'base,exponent (e.g., 2,3)', title: 'Enter base and exponent separated by comma' },
-      GCD: { type: 'pair', placeholder: 'a,b (e.g., 12,8)', title: 'Enter two numbers separated by comma' },
-      BinarySearch: { type: 'pair', placeholder: 'target,max (e.g., 5,10)', title: 'Enter target number and maximum value' },
-      ArraySum: { type: 'array', placeholder: '1,2,3,4,5', title: 'Enter numbers separated by commas' },
+      Fibonacci: { 
+        type: 'single', 
+        placeholder: 'Enter number (e.g., 5)', 
+        title: 'Enter a number for Fibonacci sequence',
+        defaultValue: '5'
+      },
+      Factorial: { 
+        type: 'single', 
+        placeholder: 'Enter number (e.g., 5)', 
+        title: 'Enter a number for Factorial calculation',
+        defaultValue: '5'
+      },
+      Power: { 
+        type: 'pair', 
+        placeholder: 'base,exponent (e.g., 2,3)', 
+        title: 'Enter base and exponent separated by comma',
+        defaultValue: '2,3'
+      },
+      GCD: { 
+        type: 'pair', 
+        placeholder: 'num1,num2 (e.g., 12,8)', 
+        title: 'Enter two numbers separated by comma',
+        defaultValue: '12,8'
+      },
+      BinarySearch: { 
+        type: 'pair', 
+        placeholder: 'target,max (e.g., 5,10)', 
+        title: 'Enter target and maximum value',
+        defaultValue: '5,10'
+      },
+      ArraySum: { 
+        type: 'array', 
+        placeholder: 'Enter numbers (e.g., 1,2,3,4)', 
+        title: 'Enter array elements separated by comma',
+        defaultValue: '1,2,3,4'
+      },
       TowerOfHanoi: { type: 'single', placeholder: 'Enter number of disks (e.g., 3)', title: 'Enter number of disks' }
     };
     return configs[name] || configs.Fibonacci;
@@ -22,50 +53,43 @@ const Controls = ({
 
   const config = getFunctionConfig(functionName);
 
+  const handleFunctionChange = (e) => {
+    const newFunction = e.target.value;
+    setFunctionName(newFunction);
+    setInputValue(getFunctionConfig(newFunction).defaultValue);
+  };
+
   const renderInput = () => {
-    const baseClasses = "px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50";
-    
-    switch (config.type) {
-      case 'single':
-        return (
-          <input 
-            type="number" 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder={config.placeholder}
-            title={config.title}
-            className={`${baseClasses} w-28`}
-          />
-        );
-      
-      case 'pair':
-      case 'array':
-        return (
-          <input 
-            type="text" 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder={config.placeholder}
-            title={config.title}
-            className={`${baseClasses} w-40`}
-          />
-        );
-      
-      default:
-        return null;
-    }
+    const inputClasses = `px-4 py-2 rounded-md border focus:outline-none focus:ring-2 
+      focus:ring-blue-500 transition-colors duration-200
+      ${isDarkMode 
+        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`;
+
+    return (
+      <input
+        type={config.type === 'single' ? 'number' : 'text'}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder={config.placeholder}
+        title={config.title}
+        className={`${inputClasses} w-64`}
+      />
+    );
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mb-8">
+    <div className={`p-6 rounded-lg shadow-lg transition-colors duration-200
+      ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       <div className="flex flex-wrap gap-4 items-center justify-center">
         <select 
           value={functionName} 
-          onChange={(e) => {
-            setFunctionName(e.target.value);
-            setInputValue('');
-          }}
-          className="px-4 py-2 rounded-md border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
+          onChange={handleFunctionChange}
+          className={`px-4 py-2 rounded-md border focus:outline-none focus:ring-2 
+            focus:ring-blue-500 transition-colors duration-200
+            ${isDarkMode 
+              ? 'bg-gray-700 border-gray-600 text-white' 
+              : 'bg-white border-gray-300 text-gray-900'}`}
         >
           <option value="Fibonacci">Fibonacci</option>
           <option value="Factorial">Factorial</option>
@@ -73,16 +97,17 @@ const Controls = ({
           <option value="GCD">GCD</option>
           <option value="BinarySearch">Binary Search</option>
           <option value="ArraySum">Array Sum</option>
-          <option value="TowerOfHanoi">Tower of Hanoi</option>
         </select>
 
         {renderInput()}
 
         <button 
           onClick={onGenerateTree}
-          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 
-                   transition-colors duration-200 focus:outline-none focus:ring-2 
-                   focus:ring-blue-400 focus:ring-offset-2"
+          className={`px-6 py-2 text-white rounded-md transition-colors duration-200 
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+            ${isDarkMode 
+              ? 'bg-blue-600 hover:bg-blue-700' 
+              : 'bg-blue-500 hover:bg-blue-600'}`}
         >
           Visualize
         </button>

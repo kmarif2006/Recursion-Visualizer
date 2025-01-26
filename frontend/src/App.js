@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import Controls from './components/Controls/Controls';
 import TreeVisualization from './components/TreeVisualization/TreeVisualization';
 import ControlPanel from './components/Controls/ControlPanel';
-import { generateRecursionTree } from './Services/api';
+import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import CodeViewer from './components/CodeViewer/CodeViewer';
 import Resizer from './components/Resizer/Resizer';
+import { generateRecursionTree } from './Services/api';
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [recursionData, setRecursionData] = useState(null);
   const [functionName, setFunctionName] = useState("Fibonacci");
-  const [inputValue, setInputValue] = useState(5);
+  const [inputValue, setInputValue] = useState("5");
   const [progress, setProgress] = useState(0);
   const [currentMessage, setCurrentMessage] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
-  const [codeWidth, setCodeWidth] = useState(25); // Initial width percentage
+  const [codeWidth, setCodeWidth] = useState(25);
+
+  // Load theme preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   const handleGenerateTree = async () => {
     try {
@@ -29,58 +51,51 @@ function App() {
     }
   };
 
-
-  const countNodes = (node) => {
-    let count = 1;
-    if (node.children) {
-      node.children.forEach(child => {
-        count += countNodes(child);
-      });
-    }
-    return count;
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className={`min-h-screen transition-colors duration-200 
+      ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       <div className="container mx-auto px-4 py-8">
-        <Header />
+        <ThemeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        <Header isDarkMode={isDarkMode} />
         <Controls 
           functionName={functionName}
           setFunctionName={setFunctionName}
           inputValue={inputValue}
           setInputValue={setInputValue}
           onGenerateTree={handleGenerateTree}
+          isDarkMode={isDarkMode}
         />
         
-        {/* Visualization Controls Panel */}
-        <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
-          <h2 className="text-lg font-semibold text-blue-800 mb-2">Progress Bar</h2>
+        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-4 
+          transition-colors duration-200`}>
+          <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2">
+            Progress Bar
+          </h2>
           <ControlPanel 
-           
             progress={progress}
             currentMessage={currentMessage}
           />
         </div>
 
-        {/* Main Content Area */}
         <div className="flex h-[70vh] relative items-stretch">
-          {/* Code Implementation */}
           <div 
-            className="bg-white rounded-l-lg shadow-lg p-4 overflow-auto transition-all duration-150 ease-in-out"
+            className={`rounded-l-lg shadow-lg p-4 overflow-auto transition-all duration-200
+              ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
             style={{ width: `${codeWidth}%` }}
           >
-            <h2 className="text-lg font-semibold text-blue-800 mb-2">Code Implementation</h2>
-            <CodeViewer functionName={functionName} />
+            <CodeViewer 
+              functionName={functionName} 
+              isDarkMode={isDarkMode} 
+            />
           </div>
 
-          {/* Resizer Container */}
-          <div className="w-8 flex items-center justify-center bg-gray-50">
+          <div className="w-8 flex items-center justify-center bg-gray-50 dark:bg-gray-700">
             <Resizer onResize={setCodeWidth} />
           </div>
 
-          {/* Tree Visualization */}
           <div 
-            className="bg-white rounded-r-lg shadow-lg p-4 relative transition-all duration-150 ease-in-out"
+            className={`rounded-r-lg shadow-lg p-4 relative transition-all duration-200
+              ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
             style={{ width: `${100 - codeWidth - 2}%` }}
           >
             <TreeVisualization 
@@ -88,6 +103,7 @@ function App() {
               setProgress={setProgress}
               setCurrentMessage={setCurrentMessage}
               currentStep={currentStep}
+              isDarkMode={isDarkMode}
             />
           </div>
         </div>
