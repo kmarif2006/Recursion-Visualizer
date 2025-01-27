@@ -9,27 +9,53 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
       python: `def fibonacci(n):
     if n <= 1:
         return n
-    return fibonacci(n - 1) + fibonacci(n - 2)`,
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+# Example usage:
+# n = 5
+# Result: 0, 1, 1, 2, 3, 5
+# fib(5) = 5`,
       
       javascript: `function fibonacci(n) {
     if (n <= 1) {
         return n;
     }
     return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Example usage:
+// n = 5
+// Result: 0, 1, 1, 2, 3, 5
+// fibonacci(5) = 5`,
+      
+      java: `public class Fibonacci {
+    public static int fibonacci(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+    public static void main(String[] args) {
+        int n = 5;
+        System.out.println("fibonacci(" + n + ") = " + fibonacci(n));
+    }
 }`,
       
-      java: `public static int fibonacci(int n) {
+      cpp: `#include <iostream>
+using namespace std;
+
+int fibonacci(int n) {
     if (n <= 1) {
         return n;
     }
     return fibonacci(n - 1) + fibonacci(n - 2);
-}`,
-      
-      cpp: `int fibonacci(int n) {
-    if (n <= 1) {
-        return n;
-    }
-    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main() {
+    int n = 5;
+    cout << "fibonacci(" << n << ") = " << fibonacci(n) << endl;
+    return 0;
 }`
     },
 
@@ -37,27 +63,53 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
       python: `def factorial(n):
     if n == 0:
         return 1
-    return n * factorial(n - 1)`,
+    return n * factorial(n - 1)
+
+# Example usage:
+# n = 5
+# Result: 5 * 4 * 3 * 2 * 1
+# factorial(5) = 120`,
       
       javascript: `function factorial(n) {
     if (n === 0) {
         return 1;
     }
     return n * factorial(n - 1);
+}
+
+// Example usage:
+// n = 5
+// Result: 5 * 4 * 3 * 2 * 1
+// factorial(5) = 120`,
+      
+      java: `public class Factorial {
+    public static int factorial(int n) {
+        if (n == 0) {
+            return 1;
+        }
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        int n = 5;
+        System.out.println("factorial(" + n + ") = " + factorial(n));
+    }
 }`,
       
-      java: `public static int factorial(int n) {
+      cpp: `#include <iostream>
+using namespace std;
+
+int factorial(int n) {
     if (n == 0) {
         return 1;
     }
     return n * factorial(n - 1);
-}`,
-      
-      cpp: `int factorial(int n) {
-    if (n == 0) {
-        return 1;
-    }
-    return n * factorial(n - 1);
+}
+
+int main() {
+    int n = 5;
+    cout << "factorial(" << n << ") = " << factorial(n) << endl;
+    return 0;
 }`
     },
 
@@ -65,27 +117,51 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
       python: `def gcd(a, b):
     if b == 0:
         return a
-    return gcd(b, a % b)`,
+    return gcd(b, a % b)
+
+# Example usage:
+# a = 48, b = 18
+# Result: GCD(48, 18) = 6`,
       
       javascript: `function gcd(a, b) {
     if (b === 0) {
         return a;
     }
     return gcd(b, a % b);
+}
+
+// Example usage:
+// a = 48, b = 18
+// Result: GCD(48, 18) = 6`,
+      
+      java: `public class GCD {
+    public static int gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
+    }
+
+    public static void main(String[] args) {
+        int a = 48, b = 18;
+        System.out.println("GCD(" + a + ", " + b + ") = " + gcd(a, b));
+    }
 }`,
       
-      java: `public static int gcd(int a, int b) {
+      cpp: `#include <iostream>
+using namespace std;
+
+int gcd(int a, int b) {
     if (b == 0) {
         return a;
     }
     return gcd(b, a % b);
-}`,
-      
-      cpp: `int gcd(int a, int b) {
-    if (b == 0) {
-        return a;
-    }
-    return gcd(b, a % b);
+}
+
+int main() {
+    int a = 48, b = 18;
+    cout << "GCD(" << a << ", " << b << ") = " << gcd(a, b) << endl;
+    return 0;
 }`
     },
 
@@ -96,7 +172,11 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
         return
     tower_of_hanoi(n - 1, source, target, auxiliary)
     print(f"Move disk {n} from {source} to {target}")
-    tower_of_hanoi(n - 1, auxiliary, source, target)`,
+    tower_of_hanoi(n - 1, auxiliary, source, target)
+
+# Example usage:
+# n = 3
+# Result: Moves to shift 3 disks from A to C using B`,
       
       javascript: `function towerOfHanoi(n, source='A', auxiliary='B', target='C') {
     if (n === 1) {
@@ -106,19 +186,33 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
     towerOfHanoi(n - 1, source, target, auxiliary);
     console.log(\`Move disk \${n} from \${source} to \${target}\`);
     towerOfHanoi(n - 1, auxiliary, source, target);
-}`,
+}
+
+// Example usage:
+// n = 3
+// Result: Moves to shift 3 disks from A to C using B`,
       
-      java: `public static void towerOfHanoi(int n, char source, char auxiliary, char target) {
-    if (n == 1) {
-        System.out.println("Move disk 1 from " + source + " to " + target);
-        return;
+      java: `public class TowerOfHanoi {
+    public static void towerOfHanoi(int n, char source, char auxiliary, char target) {
+        if (n == 1) {
+            System.out.println("Move disk 1 from " + source + " to " + target);
+            return;
+        }
+        towerOfHanoi(n - 1, source, target, auxiliary);
+        System.out.println("Move disk " + n + " from " + source + " to " + target);
+        towerOfHanoi(n - 1, auxiliary, source, target);
     }
-    towerOfHanoi(n - 1, source, target, auxiliary);
-    System.out.println("Move disk " + n + " from " + source + " to " + target);
-    towerOfHanoi(n - 1, auxiliary, source, target);
+
+    public static void main(String[] args) {
+        int n = 3;
+        towerOfHanoi(n, 'A', 'B', 'C');
+    }
 }`,
       
-      cpp: `void towerOfHanoi(int n, char source='A', char auxiliary='B', char target='C') {
+      cpp: `#include <iostream>
+using namespace std;
+
+void towerOfHanoi(int n, char source='A', char auxiliary='B', char target='C') {
     if (n == 1) {
         cout << "Move disk 1 from " << source << " to " << target << endl;
         return;
@@ -126,15 +220,21 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
     towerOfHanoi(n - 1, source, target, auxiliary);
     cout << "Move disk " << n << " from " << source << " to " << target << endl;
     towerOfHanoi(n - 1, auxiliary, source, target);
+}
+
+int main() {
+    int n = 3;
+    towerOfHanoi(n);
+    return 0;
 }`
     }
   };
 
   const languageOptions = [
-    { value: 'python', label: 'Python', icon: '🐍' },
-    { value: 'javascript', label: 'JavaScript', icon: '📜' },
-    { value: 'java', label: 'Java', icon: '☕' },
-    { value: 'cpp', label: 'C++', icon: '⚡' }
+    { value: 'python', label: 'Python' },
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'java', label: 'Java' },
+    { value: 'cpp', label: 'C++' }
   ];
 
   const copyToClipboard = async () => {
@@ -167,7 +267,7 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
           >
             {languageOptions.map(option => (
               <option key={option.value} value={option.value}>
-                {option.icon} {option.label}
+                {option.label}
               </option>
             ))}
           </select>
