@@ -14,13 +14,17 @@ const Controls = ({
         type: 'single', 
         placeholder: 'Enter number (e.g., 5)', 
         title: 'Enter a number for Fibonacci sequence',
-        defaultValue: '5'
+        defaultValue: '5',
+        min: 0,
+        max: 10
       },
       Factorial: { 
         type: 'single', 
         placeholder: 'Enter number (e.g., 5)', 
         title: 'Enter a number for Factorial calculation',
-        defaultValue: '5'
+        defaultValue: '5',
+        min: 0,
+        max: 10
       },
       Power: { 
         type: 'pair', 
@@ -46,7 +50,14 @@ const Controls = ({
         title: 'Enter array elements separated by comma',
         defaultValue: '1,2,3,4'
       },
-      TowerOfHanoi: { type: 'single', placeholder: 'Enter number of disks (e.g., 3)', title: 'Enter number of disks' }
+      TowerOfHanoi: { 
+        type: 'single', 
+        placeholder: 'Enter number of disks (1-5)', 
+        title: 'Enter number of disks (max 5)',
+        defaultValue: '3',
+        min: 1,
+        max: 5
+      }
     };
     return configs[name] || configs.Fibonacci;
   };
@@ -57,6 +68,20 @@ const Controls = ({
     const newFunction = e.target.value;
     setFunctionName(newFunction);
     setInputValue(getFunctionConfig(newFunction).defaultValue);
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    if (config.type === 'single') {
+      const num = parseInt(value);
+      if (!isNaN(num) && num >= config.min && num <= config.max) {
+        setInputValue(value);
+      } else if (value === '' || value === '-') {
+        setInputValue(value);
+      }
+    } else {
+      setInputValue(value);
+    }
   };
 
   const renderInput = () => {
@@ -70,9 +95,11 @@ const Controls = ({
       <input
         type={config.type === 'single' ? 'number' : 'text'}
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={handleInputChange}
         placeholder={config.placeholder}
         title={config.title}
+        min={config.min}
+        max={config.max}
         className={`${inputClasses} w-64`}
       />
     );
@@ -97,6 +124,7 @@ const Controls = ({
           <option value="GCD">GCD</option>
           <option value="BinarySearch">Binary Search</option>
           <option value="ArraySum">Array Sum</option>
+          <option value="TowerOfHanoi">Tower of Hanoi</option>
         </select>
 
         {renderInput()}

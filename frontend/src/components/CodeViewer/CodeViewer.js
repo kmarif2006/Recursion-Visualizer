@@ -81,13 +81,8 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
         print(f"Move disk 1 from {source} to {target}")
         return
     
-    
     tower_of_hanoi(n - 1, source, target, auxiliary)
-    
-    
     print(f"Move disk {n} from {source} to {target}")
-    
-    
     tower_of_hanoi(n - 1, auxiliary, source, target)`,
 
     ArraySum: `def array_sum(arr, index):
