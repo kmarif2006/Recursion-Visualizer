@@ -11,10 +11,8 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
         return n
     return fibonacci(n - 1) + fibonacci(n - 2)
 
-# Example usage:
-# n = 5
-# Result: 0, 1, 1, 2, 3, 5
-# fib(5) = 5`,
+n = 5
+result = fibonacci(n)`,
       
       javascript: `function fibonacci(n) {
     if (n <= 1) {
@@ -23,10 +21,8 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-// Example usage:
-// n = 5
-// Result: 0, 1, 1, 2, 3, 5
-// fibonacci(5) = 5`,
+const n = 5;
+const result = fibonacci(n);`,
       
       java: `public class Fibonacci {
     public static int fibonacci(int n) {
@@ -38,7 +34,8 @@ const CodeViewer = ({ functionName, isDarkMode }) => {
 
     public static void main(String[] args) {
         int n = 5;
-        System.out.println("fibonacci(" + n + ") = " + fibonacci(n));
+        int result = fibonacci(n);
+        System.out.println(result);
     }
 }`,
       
@@ -54,7 +51,8 @@ int fibonacci(int n) {
 
 int main() {
     int n = 5;
-    cout << "fibonacci(" << n << ") = " << fibonacci(n) << endl;
+    int result = fibonacci(n);
+    cout << result << endl;
     return 0;
 }`
     },
@@ -65,10 +63,8 @@ int main() {
         return 1
     return n * factorial(n - 1)
 
-# Example usage:
-# n = 5
-# Result: 5 * 4 * 3 * 2 * 1
-# factorial(5) = 120`,
+n = 5
+result = factorial(n)`,
       
       javascript: `function factorial(n) {
     if (n === 0) {
@@ -77,10 +73,8 @@ int main() {
     return n * factorial(n - 1);
 }
 
-// Example usage:
-// n = 5
-// Result: 5 * 4 * 3 * 2 * 1
-// factorial(5) = 120`,
+const n = 5;
+const result = factorial(n);`,
       
       java: `public class Factorial {
     public static int factorial(int n) {
@@ -92,7 +86,8 @@ int main() {
 
     public static void main(String[] args) {
         int n = 5;
-        System.out.println("factorial(" + n + ") = " + factorial(n));
+        int result = factorial(n);
+        System.out.println(result);
     }
 }`,
       
@@ -108,7 +103,8 @@ int factorial(int n) {
 
 int main() {
     int n = 5;
-    cout << "factorial(" << n << ") = " << factorial(n) << endl;
+    int result = factorial(n);
+    cout << result << endl;
     return 0;
 }`
     },
@@ -119,9 +115,8 @@ int main() {
         return a
     return gcd(b, a % b)
 
-# Example usage:
-# a = 48, b = 18
-# Result: GCD(48, 18) = 6`,
+a, b = 48, 18
+result = gcd(a, b)`,
       
       javascript: `function gcd(a, b) {
     if (b === 0) {
@@ -130,9 +125,8 @@ int main() {
     return gcd(b, a % b);
 }
 
-// Example usage:
-// a = 48, b = 18
-// Result: GCD(48, 18) = 6`,
+const a = 48, b = 18;
+const result = gcd(a, b);`,
       
       java: `public class GCD {
     public static int gcd(int a, int b) {
@@ -144,7 +138,8 @@ int main() {
 
     public static void main(String[] args) {
         int a = 48, b = 18;
-        System.out.println("GCD(" + a + ", " + b + ") = " + gcd(a, b));
+        int result = gcd(a, b);
+        System.out.println(result);
     }
 }`,
       
@@ -160,7 +155,8 @@ int gcd(int a, int b) {
 
 int main() {
     int a = 48, b = 18;
-    cout << "GCD(" << a << ", " << b << ") = " << gcd(a, b) << endl;
+    int result = gcd(a, b);
+    cout << result << endl;
     return 0;
 }`
     },
@@ -174,9 +170,8 @@ int main() {
     print(f"Move disk {n} from {source} to {target}")
     tower_of_hanoi(n - 1, auxiliary, source, target)
 
-# Example usage:
-# n = 3
-# Result: Moves to shift 3 disks from A to C using B`,
+n = 3
+tower_of_hanoi(n)`,
       
       javascript: `function towerOfHanoi(n, source='A', auxiliary='B', target='C') {
     if (n === 1) {
@@ -188,9 +183,8 @@ int main() {
     towerOfHanoi(n - 1, auxiliary, source, target);
 }
 
-// Example usage:
-// n = 3
-// Result: Moves to shift 3 disks from A to C using B`,
+const n = 3;
+towerOfHanoi(n);`,
       
       java: `public class TowerOfHanoi {
     public static void towerOfHanoi(int n, char source, char auxiliary, char target) {
@@ -225,6 +219,199 @@ void towerOfHanoi(int n, char source='A', char auxiliary='B', char target='C') {
 int main() {
     int n = 3;
     towerOfHanoi(n);
+    return 0;
+}`
+    },
+
+    Power: {
+      python: `def power(base, exponent):
+    if exponent == 0:
+        return 1
+    return base * power(base, exponent - 1)
+
+base, exponent = 2, 3
+result = power(base, exponent)`,
+      
+      javascript: `function power(base, exponent) {
+    if (exponent === 0) {
+        return 1;
+    }
+    return base * power(base, exponent - 1);
+}
+
+const base = 2, exponent = 3;
+const result = power(base, exponent);`,
+      
+      java: `public class Power {
+    public static int power(int base, int exponent) {
+        if (exponent == 0) {
+            return 1;
+        }
+        return base * power(base, exponent - 1);
+    }
+
+    public static void main(String[] args) {
+        int base = 2, exponent = 3;
+        int result = power(base, exponent);
+        System.out.println(result);
+    }
+}`,
+      
+      cpp: `#include <iostream>
+using namespace std;
+
+int power(int base, int exponent) {
+    if (exponent == 0) {
+        return 1;
+    }
+    return base * power(base, exponent - 1);
+}
+
+int main() {
+    int base = 2, exponent = 3;
+    int result = power(base, exponent);
+    cout << result << endl;
+    return 0;
+}`
+    },
+
+    BinarySearch: {
+      python: `def binary_search(arr, target, left, right):
+    if left > right:
+        return -1
+    
+    mid = (left + right) // 2
+    if arr[mid] == target:
+        return mid
+    elif arr[mid] > target:
+        return binary_search(arr, target, left, mid - 1)
+    else:
+        return binary_search(arr, target, mid + 1, right)
+
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+target = 6
+result = binary_search(arr, target, 0, len(arr) - 1)`,
+      
+      javascript: `function binarySearch(arr, target, left, right) {
+    if (left > right) {
+        return -1;
+    }
+    
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) {
+        return mid;
+    } else if (arr[mid] > target) {
+        return binarySearch(arr, target, left, mid - 1);
+    } else {
+        return binarySearch(arr, target, mid + 1, right);
+    }
+}
+
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const target = 6;
+const result = binarySearch(arr, target, 0, arr.length - 1);`,
+      
+      java: `public class BinarySearch {
+    public static int binarySearch(int[] arr, int target, int left, int right) {
+        if (left > right) {
+            return -1;
+        }
+        
+        int mid = (left + right) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] > target) {
+            return binarySearch(arr, target, left, mid - 1);
+        } else {
+            return binarySearch(arr, target, mid + 1, right);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int target = 6;
+        int result = binarySearch(arr, target, 0, arr.length - 1);
+        System.out.println(result);
+    }
+}`,
+      
+      cpp: `#include <iostream>
+using namespace std;
+
+int binarySearch(int arr[], int target, int left, int right) {
+    if (left > right) {
+        return -1;
+    }
+    
+    int mid = (left + right) / 2;
+    if (arr[mid] == target) {
+        return mid;
+    } else if (arr[mid] > target) {
+        return binarySearch(arr, target, left, mid - 1);
+    } else {
+        return binarySearch(arr, target, mid + 1, right);
+    }
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int target = 6;
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int result = binarySearch(arr, target, 0, size - 1);
+    cout << result << endl;
+    return 0;
+}`
+    },
+
+    ArraySum: {
+      python: `def array_sum(arr, n):
+    if n <= 0:
+        return 0
+    return arr[n-1] + array_sum(arr, n-1)
+
+arr = [1, 2, 3, 4, 5]
+result = array_sum(arr, len(arr))`,
+      
+      javascript: `function arraySum(arr, n) {
+    if (n <= 0) {
+        return 0;
+    }
+    return arr[n-1] + arraySum(arr, n-1);
+}
+
+const arr = [1, 2, 3, 4, 5];
+const result = arraySum(arr, arr.length);`,
+      
+      java: `public class ArraySum {
+    public static int arraySum(int[] arr, int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        return arr[n-1] + arraySum(arr, n-1);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        int result = arraySum(arr, arr.length);
+        System.out.println(result);
+    }
+}`,
+      
+      cpp: `#include <iostream>
+using namespace std;
+
+int arraySum(int arr[], int n) {
+    if (n <= 0) {
+        return 0;
+    }
+    return arr[n-1] + arraySum(arr, n-1);
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int result = arraySum(arr, size);
+    cout << result << endl;
     return 0;
 }`
     }
@@ -296,7 +483,7 @@ int main() {
       <div className={`flex-1 overflow-auto p-4 font-mono text-sm whitespace-pre
         ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-800'}`}>
         {codeExamples[functionName]?.[selectedLanguage] || 
-         '// Select a function to view its implementation'}
+         'Select a function to view its implementation'}
       </div>
     </div>
   );
