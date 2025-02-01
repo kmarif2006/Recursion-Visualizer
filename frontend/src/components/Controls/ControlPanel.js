@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ControlPanel = ({ onAction1, onAction2, onAction3, onAction4, progress, currentMessage }) => {
+const ControlPanel = ({progress, currentMessage }) => {
   return (
     <div className="flex flex-col items-center">
       <div className="flex items-center w-full mb-2">

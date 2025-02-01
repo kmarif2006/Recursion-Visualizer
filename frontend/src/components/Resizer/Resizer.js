@@ -14,6 +14,7 @@ const Resizer = ({ onResize }) => {
     if (onResize) {
       const percentage = (e.clientX / window.innerWidth) * 100;
       const limitedPercentage = Math.min(Math.max(percentage, 15), 50);
+      //clamp the percentage between 15% and 50%
       onResize(limitedPercentage);
     }
   };

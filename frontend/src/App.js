@@ -9,6 +9,7 @@ import Resizer from './components/Resizer/Resizer';
 import { generateRecursionTree } from './Services/api';
 
 function App() {
+  //useState hooks
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [recursionData, setRecursionData] = useState(null);
   const [functionName, setFunctionName] = useState("Fibonacci");
@@ -18,7 +19,7 @@ function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [codeWidth, setCodeWidth] = useState(25);
 
-  // Load theme preference
+  // Load theme preference from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -27,6 +28,7 @@ function App() {
     }
   }, []);
 
+  // Toggle dark mode logic
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     if (!isDarkMode) {
@@ -38,6 +40,7 @@ function App() {
     }
   };
 
+  // Generate tree logic
   const handleGenerateTree = async () => {
     try {
       const data = await generateRecursionTree(functionName, inputValue);

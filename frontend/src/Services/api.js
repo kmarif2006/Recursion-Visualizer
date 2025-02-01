@@ -4,7 +4,7 @@ export const generateRecursionTree = async (functionName, inputValue) => {
   try {
     let processedInput;
 
-    console.log('Processing request for:', functionName); // Debug log
+    // console.log('Processing request for:', functionName); // Debug log
 
     // Input validation and processing
     switch (functionName) {
@@ -59,7 +59,7 @@ export const generateRecursionTree = async (functionName, inputValue) => {
         processedInput = num;
     }
 
-    console.log('Sending request:', { functionName, input: processedInput }); // Debug log
+    // console.log('Sending request:', { functionName, input: processedInput }); // Debug log
 
     const response = await fetch(`${API_BASE_URL}/run-code`, {
       method: 'POST',
