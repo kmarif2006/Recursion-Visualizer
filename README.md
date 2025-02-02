@@ -8,6 +8,7 @@ Welcome to **Recursion Visualizer**! This project helps you understand and visua
 
 ## Technologies Used
 - **Frontend**: React.js for building the user interface.
+- **Backend**: Node.js + Express.js
 - **Styling**: Tailwind CSS for modern, responsive styling.
 - **Visualization**: Plain JavaScript for recursion logic and rendering the tree structure.
 - **Other**: JavaScript for recursive logic implementation.
