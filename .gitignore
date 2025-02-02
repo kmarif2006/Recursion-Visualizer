@@ -1,0 +1,34 @@
+# Node modules
+/node_modules/
+
+# Build directory
+/build/
+
+# React environment files
+.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+/.pnp/
+/.pnp.js
+
+# Coverage reports
+/coverage/
+
+# IDE files
+.idea/
+/.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Other
+*.log
+*.bak
+
+.env

@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "backend": "file:backend"
+  },
+  "name": "recursion-visualizer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "start": "cd backend && npm run start & cd ../frontend && npm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
